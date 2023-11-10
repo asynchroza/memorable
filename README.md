@@ -12,3 +12,7 @@
 - `bun db:push` to push the prisma schema to the database 
 - `bun db:studio` to easily inspect the state of the database
 - `bun dev` to start development server
+
+## Features
+### Networks:
+Networks are invite-only systems that allow users to share reviews exclusively with people of their choice. When a network is loaded, the map will display only reviews permitted by the network. If the network is configured to load public reviews, it will showcase private network-only reviews alongside the public database of reviews.
