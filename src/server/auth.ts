@@ -62,12 +62,39 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials, req) {
         // TODO: fetch user by username and compare password to stored hash
+        if(!credentials?.username) return null;
+
         const user = await db.user.findUnique({where: {
           username: credentials?.username
+        }, include: {
+          sessions: true
         }})
 
-        console.log(user);
-        return user ?? null;
+        if(!user) return null;
+
+        const session = await db.session.create({
+          data: {
+            sessionToken: (Math.random() + 1).toString(36).substring(7),
+            userId: user?.id,
+            expires: new Date()
+          }
+        })
+        
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+        user.sessions.push(session);
+
+        const updatedUser = await db.user.update({where: {
+          username: credentials.username
+        }, data: {
+          sessions: {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            set: user.sessions 
+          }
+        }})
+
+        console.log(updatedUser)
+
+        return user;
       }
     })
   ],
