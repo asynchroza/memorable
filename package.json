@@ -9,7 +9,7 @@
     "db:studio": "prisma studio",
     "db:seed": "bunx prisma db seed",
     "db:bash": "docker exec -it memorable-db-1 /bin/bash",
-    "dev": "next dev",
+    "dev": "next dev --port 6969",
     "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start"

@@ -9,6 +9,7 @@ try {
             email: 'johnsmith@gmail.com',
             name: 'John Smith',
             username: 'johnsmith14',
+            password: 'misho1234'
         },
     })
 
