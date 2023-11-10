@@ -5,7 +5,6 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
-import CredentialsProvider from "next-auth/providers/credentials";
 
 
 import { env } from "~/env.mjs";
@@ -53,23 +52,6 @@ export const authOptions: NextAuthOptions = {
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
-    // TODO: disable credentials provider in deployed environments
-    CredentialsProvider({
-      name: 'password',
-      credentials: {
-        username: {label: 'Username', type: 'text'},
-        password: {label: 'Password', type: 'password'}
-      },
-      async authorize(credentials, req) {
-        // TODO: fetch user by username and compare password to stored hash
-        const user = await db.user.findUnique({where: {
-          username: credentials?.username
-        }})
-
-        console.log(user);
-        return user ?? null;
-      }
-    })
   ],
 };
 
