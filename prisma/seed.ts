@@ -2,6 +2,17 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 try {
+    const superAdmin = await prisma.user.upsert({
+        where: { email: 'superadmin@admin.com' },
+        update: {},
+        create: {
+            email: 'superadmin@admin.com',
+            name: 'Super Admin',
+            username: 'superadmin',
+            password: 'admin1234'
+        },
+    })
+
     const johnSmith = await prisma.user.upsert({
         where: { email: 'johnsmith@gmail.com' },
         update: {},
@@ -13,7 +24,7 @@ try {
         },
     })
 
-    console.log({ johnSmith })
+    console.log({ superAdmin, johnSmith })
 } catch (error) {
     console.error(error)
     await prisma.$disconnect()

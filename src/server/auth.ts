@@ -10,6 +10,37 @@ import DiscordProvider from 'next-auth/providers/discord';
 import { env } from "~/env.mjs";
 import { db } from "~/server/db";
 
+const providers = [];
+
+if (env.DISCORD_CLIENT_ID && env.DISCORD_CLIENT_SECRET) {
+  providers.push(DiscordProvider({
+    clientId: env.DISCORD_CLIENT_ID,
+    clientSecret: env.DISCORD_CLIENT_SECRET,
+  }));
+}
+
+providers.push(CredentialsProvider({
+  name: 'password',
+  credentials: {
+    username: { label: 'Username', type: 'text' },
+    password: { label: 'Password', type: 'password' }
+  },
+  async authorize(credentials) {
+    const user = await db.user.findUnique({
+      where: {
+        username: credentials?.username
+      }
+    })
+
+    // TODO: Password should be stored as hash
+    if (user && user.password == credentials?.password) {
+      return user;
+    }
+
+    return null;
+  }
+}))
+
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
  *
@@ -21,33 +52,7 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt"
   },
   adapter: PrismaAdapter(db),
-  providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
-    }),
-    CredentialsProvider({
-      name: 'password',
-      credentials: {
-        username: { label: 'Username', type: 'text' },
-        password: { label: 'Password', type: 'password' }
-      },
-      async authorize(credentials) {
-        const user = await db.user.findUnique({
-          where: {
-            username: credentials?.username
-          }
-        })
-
-        // TODO: Password should be stored as hash
-        if(user && user.password == credentials?.password){
-          return user;
-        }
-
-        return null;
-      }
-    })
-  ],
+  providers,
 };
 
 /**
