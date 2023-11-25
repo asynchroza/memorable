@@ -1,13 +1,13 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import {
+import { type
   DefaultSession,
   getServerSession,
   type NextAuthOptions,
 } from "next-auth";
-import { type JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import DiscordProvider from 'next-auth/providers/discord';
 
+// TODO: Extend JWT and Session to include the user's unique ID
 declare module 'next-auth/jwt' {
   interface JWT {
     username: string
