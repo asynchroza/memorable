@@ -16,7 +16,7 @@
     "start": "next start"
   },
   "prisma": {
-    "seed": "bun prisma/seed.ts"
+    "seed": "bun prisma/utils/seed.ts"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
