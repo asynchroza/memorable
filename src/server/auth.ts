@@ -1,10 +1,30 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import {
+  DefaultSession,
   getServerSession,
   type NextAuthOptions,
 } from "next-auth";
+import { type JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import DiscordProvider from 'next-auth/providers/discord';
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    username: string
+  }
+}
+
+declare module 'next-auth' {
+  interface Session {
+    user: {
+      username: string
+    } & DefaultSession["user"]
+  }
+
+  interface User {
+    username: string
+  }
+}
 
 
 import { env } from "~/env.mjs";
@@ -49,7 +69,25 @@ providers.push(CredentialsProvider({
 export const authOptions: NextAuthOptions = {
   secret: env.NEXTAUTH_SECRET,
   session: {
-    strategy: "jwt"
+    strategy: "jwt",
+  },
+  callbacks: {
+    jwt: async ({ token, user }) => {
+      if (user) {
+        token.username = user.username;
+      }
+      return Promise.resolve(token);
+    },
+    session: async ({ session, token }) => {
+      if (token) {
+        session.user.username = token.username;
+        session.user.email = token.email;
+        session.user.name = token.name;
+      }
+
+      // session.user.image = token.user.image;
+      return Promise.resolve(session);
+    }
   },
   adapter: PrismaAdapter(db),
   providers,
