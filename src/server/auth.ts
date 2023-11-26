@@ -11,6 +11,7 @@ import DiscordProvider from 'next-auth/providers/discord';
 declare module 'next-auth/jwt' {
   interface JWT {
     username: string
+    id: string
   }
 }
 
@@ -18,11 +19,13 @@ declare module 'next-auth' {
   interface Session {
     user: {
       username: string
+      id: string
     } & DefaultSession["user"]
   }
 
   interface User {
     username: string
+    id: string
   }
 }
 
@@ -75,6 +78,7 @@ export const authOptions: NextAuthOptions = {
     jwt: async ({ token, user }) => {
       if (user) {
         token.username = user.username;
+        token.id = user.id;
       }
       return Promise.resolve(token);
     },
@@ -83,6 +87,7 @@ export const authOptions: NextAuthOptions = {
         session.user.username = token.username;
         session.user.email = token.email;
         session.user.name = token.name;
+        session.user.id = token.id;
       }
 
       // session.user.image = token.user.image;
