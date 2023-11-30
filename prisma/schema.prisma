@@ -14,16 +14,13 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
+model Review {
+    id Int @id @default(autoincrement())
+    comment String 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
-
-    @@index([name])
 }
 
 model User {
@@ -34,5 +31,5 @@ model User {
     email         String   @unique
     emailVerified DateTime?
     image         String?
-    posts         Post[]
+    reviews Review[]
 }
