@@ -20,7 +20,7 @@ async function CrudShowcase() {
 
   return (
     <div className="w-full max-w-xs">
-      {latestReviews ? latestReviews.map((review) => (<h1 key={review.id}>{review.comment}</h1>)) : null}
+      {latestReviews ? latestReviews.map((review) => (<p key={review.id}>{review.comment}</p>)) : null}
     </div>
   );
 }
