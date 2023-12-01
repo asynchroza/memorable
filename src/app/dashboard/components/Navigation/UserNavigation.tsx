@@ -1,3 +1,5 @@
+'use client'
+
 import {
     Avatar,
     AvatarFallback,
@@ -11,14 +13,15 @@ import {
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
-    DropdownMenuShortcut,
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
-import Link from "next/link";
-import { getServerAuthSession } from "~/server/auth"
+import { signOut, useSession } from "next-auth/react";
+import { NAVIGATION_PATHS } from "~/app/_constants/navigation";
   
-  export async function UserNavigation() {
-    const session = await getServerAuthSession();
+  export function UserNavigation() {
+  const session = useSession();
+
+  if(!session.data) return null;
 
     return (
       <DropdownMenu>
@@ -33,9 +36,9 @@ import { getServerAuthSession } from "~/server/auth"
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">{session?.user.name}</p>
+              <p className="text-sm font-medium leading-none">{session.data.user.name}</p>
               <p className="text-xs leading-none text-muted-foreground">
-                {session?.user.email}
+                {session.data.user.email}
               </p>
             </div>
           </DropdownMenuLabel>
@@ -53,8 +56,8 @@ import { getServerAuthSession } from "~/server/auth"
             <DropdownMenuItem>New Team</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <Link href={"/api/auth/signout"}>Log out</Link>
+          <DropdownMenuItem onClick={() => signOut({callbackUrl: NAVIGATION_PATHS.LANDING_PAGE})}>
+            Log out
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
