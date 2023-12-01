@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getServerAuthSession } from "~/server/auth";
-import Navigation from "./components/Navigation/Navigation";
+import Navigation from "../_components/Navigation/Navigation";
 import { NAVIGATION_PATHS } from "../_constants/navigation";
 
 export default async function DashboardLayout({

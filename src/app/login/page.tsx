@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import { getServerAuthSession } from "~/server/auth";
-import Login from "./components/Login/Login";
+import Login from "../_components/Login/Login";
 import { redirect } from "next/navigation";
 
 export default async function Home() {

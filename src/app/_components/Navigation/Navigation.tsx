@@ -1,6 +1,6 @@
 import { getServerAuthSession } from "~/server/auth";
 import { MainNavigation } from "./MainNavigation";
-import ClientSideSessionWrapper from "~/app/_components/utilities/ClientSideSessionWrapper";
+import ClientSideSessionWrapper from "~/app/_components/Utilities/ClientSideSessionWrapper";
 import { UserNavigation } from "./UserNavigation";
 
 export default async function Navigation() {
