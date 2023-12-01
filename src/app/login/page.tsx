@@ -16,9 +16,9 @@ export default async function Home() {
       <Image
         src="/laughing_people_login.jpeg"
         alt="Reviews"
-        objectFit="cover"
         width={5090}
         height={3393}
+        className="object-cover"
       />
         <Login />
     </div>
