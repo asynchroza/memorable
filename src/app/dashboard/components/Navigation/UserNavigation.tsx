@@ -14,8 +14,12 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
+import Link from "next/link";
+import { getServerAuthSession } from "~/server/auth"
   
-  export function UserNavigation() {
+  export async function UserNavigation() {
+    const session = await getServerAuthSession();
+
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -29,9 +33,9 @@ import {
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">shadcn</p>
+              <p className="text-sm font-medium leading-none">{session?.user.name}</p>
               <p className="text-xs leading-none text-muted-foreground">
-                m@example.com
+                {session?.user.email}
               </p>
             </div>
           </DropdownMenuLabel>
@@ -39,22 +43,18 @@ import {
           <DropdownMenuGroup>
             <DropdownMenuItem>
               Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem>
               Billing
-              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem>
               Settings
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem>New Team</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            Log out
-            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+            <Link href={"/api/auth/signout"}>Log out</Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
